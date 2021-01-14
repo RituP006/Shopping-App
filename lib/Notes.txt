@@ -1,0 +1,34 @@
+************************************ Problem in passing data ******************************
+
+Problem with passing data on fly (Navigator.push()) : 
+> In large apps it's hard to find the navigating point.
+
+Problem with passing data from constructor : 
+> Sometimes we pass data to a widget where we don't use it, but need it to forward it further. 
+> can be cumbersome & difficult.
+> Unnecessary rebuilds of the entire app or major parts of the app.
+
+********************************** What is state? ******************************************
+
+> Data are reflected in User interface > change in data leads to change in UI > Data that affects the UI is called state
+
+> App-wide state : Affects entire app or significant parts of the app. 
+eg. Authentication(Is the user authenticated?) affects rendering of other screens of app
+
+>Widget(Local) state : affects only widget of its own does not affect other widgets. 
+eg. Should a loading spinner be displayed? it depends only on form input 
+
+********************************* State Management solution *****************************
+
+> The Provider Package & Pattern - A central data provider which can be attached to any widget, and then all the child widget can  
+listen to that provider by of(context).
+
+> the build() of any child widget thats listening from provider runs when data in provider changes.
+
+******************************** difference between with and extend in dart ********************
+
+> when we extend a class we logically make a strong connection between them(i.e it's treated as the same type), 
+and technically all the properties and method are accessible to child class. Multiple class cannot be extended in dart.
+
+> when we extend a mixin with 'with' keyword the connection between class are not strong, but we use it as a utility class,
+we can access all its properties and method. more than one mixin can be added to the class.
