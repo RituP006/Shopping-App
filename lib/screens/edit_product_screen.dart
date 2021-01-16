@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
+import '../providers/products_provider.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = './editproduct';
@@ -17,11 +19,39 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _form = GlobalKey<FormState>();
   var _editedProduct =
       Product(id: null, title: '', description: '', price: 0, imageUrl: '');
+  var _isInIt = true;
+  var _initValues = {
+    'title': "",
+    "dscription": "",
+    'price': "",
+    'imageUrl': "",
+  };
 
   @override
   void initState() {
     _imageFocusNode.addListener(_imageUrlUpdate);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInIt) {
+      final productId = ModalRoute.of(context).settings.arguments as String;
+      if (productId != null) {
+        _editedProduct =
+            Provider.of<Products>(context, listen: false).findById(productId);
+        _initValues = {
+          'title': _editedProduct.title,
+          "description": _editedProduct.description,
+          'price': _editedProduct.price.toString(),
+          // 'imageUrl': _editedProduct.imageUrl,
+          'imageUrl': "",
+        };
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }
+    }
+    _isInIt = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -36,6 +66,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _imageUrlUpdate() {
     if (!_imageFocusNode.hasFocus) {
+      if ((!_imageUrlController.text.startsWith('http') &&
+          !_imageUrlController.text.startsWith('https'))) {
+        return;
+      }
       setState(() {});
     }
   }
@@ -46,6 +80,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     _form.currentState.save();
+    if (_editedProduct.id != null) {
+      Provider.of<Products>(context, listen: false)
+          .updateProduct(_editedProduct.id, _editedProduct);
+    } else {
+      Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+    }
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -67,6 +109,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
             child: ListView(
               children: <Widget>[
                 TextFormField(
+                  initialValue: _initValues['title'],
                   decoration: InputDecoration(labelText: 'Title'),
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) {
@@ -81,14 +124,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                   onSaved: (value) {
                     _editedProduct = Product(
-                        id: null,
-                        title: value,
-                        description: _editedProduct.description,
-                        price: _editedProduct.price,
-                        imageUrl: _editedProduct.imageUrl);
+                      id: _editedProduct.id,
+                      title: value,
+                      description: _editedProduct.description,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl,
+                      isFavourite: _editedProduct.isFavourite,
+                    );
                   },
                 ),
                 TextFormField(
+                  initialValue: _initValues['price'],
                   decoration: InputDecoration(labelText: 'Price'),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
@@ -103,29 +149,46 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     if (double.tryParse(value) == null) {
                       return 'Enter a valid nummber';
                     }
-                    if(val)
+                    if (double.parse(value) <= 0) {
+                      return "Please enter a nummber grerater than zero";
+                    }
+                    return null;
                   },
                   onSaved: (value) {
                     _editedProduct = Product(
-                        id: null,
-                        title: _editedProduct.title,
-                        description: _editedProduct.description,
-                        price: double.parse(value),
-                        imageUrl: _editedProduct.imageUrl);
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      description: _editedProduct.description,
+                      price: double.parse(value),
+                      imageUrl: _editedProduct.imageUrl,
+                      isFavourite: _editedProduct.isFavourite,
+                    );
                   },
                 ),
                 TextFormField(
+                  initialValue: _initValues['description'],
                   decoration: InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
                   focusNode: _desFocusNode,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Please enter a description";
+                    }
+                    if (value.length < 10) {
+                      return "Should ne atleast 10 characters long ";
+                    }
+                    return null;
+                  },
                   onSaved: (value) {
                     _editedProduct = Product(
-                        id: null,
-                        title: _editedProduct.title,
-                        description: value,
-                        price: _editedProduct.price,
-                        imageUrl: _editedProduct.imageUrl);
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      description: value,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl,
+                      isFavourite: _editedProduct.isFavourite,
+                    );
                   },
                 ),
                 Row(
@@ -156,16 +219,29 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         textInputAction: TextInputAction.done,
                         controller: _imageUrlController,
                         focusNode: _imageFocusNode,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "please enter a URL";
+                          }
+                          if (!value.startsWith('http') &&
+                              !value.startsWith('https')) {
+                            return 'please enter a valid image URL';
+                          }
+
+                          return null;
+                        },
                         onFieldSubmitted: (_) {
                           _saveForm();
                         },
                         onSaved: (value) {
                           _editedProduct = Product(
-                              id: _editedProduct.id,
-                              title: _editedProduct.title,
-                              description: _editedProduct.description,
-                              price: _editedProduct.price,
-                              imageUrl: value);
+                            id: _editedProduct.id,
+                            title: _editedProduct.title,
+                            description: _editedProduct.description,
+                            price: _editedProduct.price,
+                            imageUrl: value,
+                            isFavourite: _editedProduct.isFavourite,
+                          );
                         },
                       ),
                     )
@@ -191,3 +267,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
 // Its used to get direct access to widgets from inside our code, mostly used with Form Widget.
 
 // double.tryParse() does not throw erroe when it fails but returns null value.
+
+// Note : In TextFormField, we cannot set initial value and controller at the same time, therefore to initialize while using controller
+// initialize the controller with initial value as done here for imageUrl.
