@@ -13,6 +13,41 @@ class UserProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
+
+    
+    Widget alertBox(ctx) {
+      return AlertDialog(
+        title: Text('Are You Sure?'),
+        content: Text('You want to delete this product'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () async {
+              try {
+                Navigator.of(ctx).pop();
+
+                await Provider.of<Products>(ctx, listen: false)
+                    .deleteProduct(id);
+              } catch (error) {
+                // Navigator.of(context1).pop();
+
+                scaffold.showSnackBar(SnackBar(
+                  content: Text(error.toString()),
+                ));
+              }
+            },
+            child: Text('Yes'),
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: Text('No'),
+          ),
+        ],
+      );
+    }
+
     return ListTile(
       title: Text(title),
       leading: CircleAvatar(
@@ -32,8 +67,11 @@ class UserProductItem extends StatelessWidget {
             ),
             IconButton(
               icon: Icon(Icons.delete),
-              onPressed: () {
-                Provider.of<Products>(context, listen: false).deleteProduct(id);
+              onPressed: () async {
+                return showDialog<AlertDialog>(
+                  context: context,
+                  builder: (ctx) => alertBox(ctx),
+                );
               },
               color: Theme.of(context).errorColor,
             ),
@@ -45,3 +83,6 @@ class UserProductItem extends StatelessWidget {
 }
 
 // NetworkImage is not a widget but an object that fetches image and forward it.
+
+// problem - when we use Scaffold.of(context) inside a async function, everything in that function is wrapped in a future and Scaffold
+// doesn't work due to how Flutter works internally.

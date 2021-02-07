@@ -32,3 +32,36 @@ and technically all the properties and method are accessible to child class. Mul
 
 > when we extend a mixin with 'with' keyword the connection between class are not strong, but we use it as a utility class,
 we can access all its properties and method. more than one mixin can be added to the class.
+
+
+************************************ Storing data in Flutter apps ********************************
+
+-> On Device Storage 
+- Only available for your app/ for your user
+- If SqlLite is used, data can persist across app restarts 
+- Workd offline
+
+-> On Web Server
+- Available for all users across different devices
+- Data persist on app restarts
+- Internet connection required
+
+*********************************** Connecting Flutter to a Database (database on web server) ***********************
+
+- It's not connected directly to database(MySQL,NoSQL) cause it's technically complex and Insecure.
+- if you connect it directly, all the user credentials will have to be stored in your app code, and could be accessible to users who
+install it.
+- therefore web server is used as a bridge between flutter and database.
+
+follow this to know about RestAPI - https://www.smashingmagazine.com/2018/01/understanding-using-rest-api/
+
+*********************************** Future in dart *********************************
+- Future in dart are used for asynchronous execution of code. 
+- .then() is used to execute a function that's supposed to be executed after the future code, however dart doesn't wait for future code 
+to be done, it continue with rest of the code synchronously.
+- .then(_) expects a response, even if future doesn't return any, also it itself return a future i.e .then(_).then(_) can be 
+used(it's called chaining ).
+
+http requests methods return Future in dart.
+
+

@@ -18,6 +18,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -39,10 +40,14 @@ class ProductItem extends StatelessWidget {
             builder: (context, product, _) => IconButton(
               color: Theme.of(context).accentColor,
               icon: Icon(
-                product.isFavourite ? Icons.favorite : Icons.favorite_border,
+                product.isFavorite ? Icons.favorite : Icons.favorite_border,
               ),
               onPressed: () {
-                product.toggleFav();
+                product.toggleFav().catchError((error) {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text(error.toString()),
+                  ));
+                });
               },
             ),
           ),

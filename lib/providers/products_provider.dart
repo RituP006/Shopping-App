@@ -1,65 +1,69 @@
+import 'dart:convert'; // offers tools for converting data
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'product.dart';
+import '../models/http_exception.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [
-    Product(
-        id: 'p1',
-        title: 'RedShirt',
-        description: 'A red shirt it is pretty red!',
-        price: 29.99,
-        imageUrl:
-            'https://images.pexels.com/photos/1956070/pexels-photo-1956070.jpeg?cs=srgb&dl=pexels-ingrid-santana-1956070.jpg&fm=jpg'),
-    Product(
-        id: 'p2',
-        title: 'Trousers',
-        description: 'Body fitting jeans',
-        price: 85.99,
-        imageUrl:
-            'https://media.istockphoto.com/photos/woman-jeans-isolated-folded-trendy-stylish-female-blue-jeans-trousers-picture-id1208196754?b=1&k=6&m=1208196754&s=170667a&w=0&h=DMpmAHi0uP1WSCKBvRpu3xeuDXTznIaUHGImgzZWdPM='),
-    Product(
-        id: 'p3',
-        title: 'floral shirt',
-        description: 'Aperfect winter match',
-        price: 129,
-        imageUrl:
-            'https://media.istockphoto.com/photos/studio-shot-of-young-handsome-tourist-man-thinking-while-wearing-picture-id665357994?b=1&k=6&m=665357994&s=170667a&w=0&h=U2TYNy3ZuZNET8i4OI_u7lH7FJ_pMn3sJPZrzqfUJD4='),
-    Product(
-        id: 'p4',
-        title: 'skirt',
-        description: 'Skirt to match all pair',
-        price: 125,
-        imageUrl:
-            'https://media.istockphoto.com/photos/red-elegant-skirt-with-ribbon-bow-isolated-on-white-picture-id882157056?b=1&k=6&m=882157056&s=170667a&w=0&h=gf6wLGZwv2YHvz5YMyOrK9VISindQm0Y18cPkE5ZDKM='),
-    Product(
-        id: 'p5',
-        title: 'saree',
-        description: 'Silk saree with fine hand work',
-        price: 229.89,
-        imageUrl:
-            'https://cdn.pixabay.com/photo/2015/10/26/06/51/designer-saree-1006688__340.jpg'),
-    Product(
-        id: 'p6',
-        title: 'shirt',
-        description: 'Free size available',
-        price: 209,
-        imageUrl:
-            'https://cdn.pixabay.com/photo/2014/11/09/19/17/mens-shirt-524022__340.jpg'),
-    Product(
-        id: 'p7',
-        title: 'socks',
-        description: 'All colors available',
-        price: 19.12,
-        imageUrl:
-            'https://media.istockphoto.com/photos/man-wearing-sandals-picture-id72736585?b=1&k=6&m=72736585&s=170667a&w=0&h=VbSMJLF3U_GrqWxYL6z-I-LZbAseawnnCt564e1a2LE='),
-    Product(
-        id: 'p8',
-        title: 'prom wear',
-        description: 'Out of stock',
-        price: 20.3,
-        imageUrl:
-            'https://media.istockphoto.com/photos/romantic-pink-dress-with-shoesvintage-style-picture-id578573556?b=1&k=6&m=578573556&s=170667a&w=0&h=hhnnCmiGBQcHG9q15UYdHQzyaQy15gm5y1mPYMiMttU='),
+    // Product(
+    //     id: 'p1',
+    //     title: 'RedShirt',
+    //     description: 'A red shirt it is pretty red!',
+    //     price: 29.99,
+    //     imageUrl:
+    //         'https://images.pexels.com/photos/1956070/pexels-photo-1956070.jpeg?cs=srgb&dl=pexels-ingrid-santana-1956070.jpg&fm=jpg'),
+    // Product(
+    //     id: 'p2',
+    //     title: 'Trousers',
+    //     description: 'Body fitting jeans',
+    //     price: 85.99,
+    //     imageUrl:
+    //         'https://media.istockphoto.com/photos/woman-jeans-isolated-folded-trendy-stylish-female-blue-jeans-trousers-picture-id1208196754?b=1&k=6&m=1208196754&s=170667a&w=0&h=DMpmAHi0uP1WSCKBvRpu3xeuDXTznIaUHGImgzZWdPM='),
+    // Product(
+    //     id: 'p3',
+    //     title: 'floral shirt',
+    //     description: 'Aperfect winter match',
+    //     price: 129,
+    //     imageUrl:
+    //         'https://media.istockphoto.com/photos/studio-shot-of-young-handsome-tourist-man-thinking-while-wearing-picture-id665357994?b=1&k=6&m=665357994&s=170667a&w=0&h=U2TYNy3ZuZNET8i4OI_u7lH7FJ_pMn3sJPZrzqfUJD4='),
+    // Product(
+    //     id: 'p4',
+    //     title: 'skirt',
+    //     description: 'Skirt to match all pair',
+    //     price: 125,
+    //     imageUrl:
+    //         'https://media.istockphoto.com/photos/red-elegant-skirt-with-ribbon-bow-isolated-on-white-picture-id882157056?b=1&k=6&m=882157056&s=170667a&w=0&h=gf6wLGZwv2YHvz5YMyOrK9VISindQm0Y18cPkE5ZDKM='),
+    // Product(
+    //     id: 'p5',
+    //     title: 'saree',
+    //     description: 'Silk saree with fine hand work',
+    //     price: 229.89,
+    //     imageUrl:
+    //         'https://cdn.pixabay.com/photo/2015/10/26/06/51/designer-saree-1006688__340.jpg'),
+    // Product(
+    //     id: 'p6',
+    //     title: 'shirt',
+    //     description: 'Free size available',
+    //     price: 209,
+    //     imageUrl:
+    //         'https://cdn.pixabay.com/photo/2014/11/09/19/17/mens-shirt-524022__340.jpg'),
+    // Product(
+    //     id: 'p7',
+    //     title: 'socks',
+    //     description: 'All colors available',
+    //     price: 19.12,
+    //     imageUrl:
+    //         'https://media.istockphoto.com/photos/man-wearing-sandals-picture-id72736585?b=1&k=6&m=72736585&s=170667a&w=0&h=VbSMJLF3U_GrqWxYL6z-I-LZbAseawnnCt564e1a2LE='),
+    // Product(
+    //     id: 'p8',
+    //     title: 'prom wear',
+    //     description: 'Out of stock',
+    //     price: 20.3,
+    //     imageUrl:
+    //         'https://media.istockphoto.com/photos/romantic-pink-dress-with-shoesvintage-style-picture-id578573556?b=1&k=6&m=578573556&s=170667a&w=0&h=hhnnCmiGBQcHG9q15UYdHQzyaQy15gm5y1mPYMiMttU='),
   ];
 
   // var _showOnlyFavorite = false;
@@ -83,36 +87,105 @@ class Products with ChangeNotifier {
   // }
 
   List<Product> get favItems {
-    return _items.where((prod) => prod.isFavourite).toList();
+    return _items.where((prod) => prod.isFavorite).toList();
   }
 
   Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void addProduct(Product product) {
-    final newProduct = Product(
+  Future<void> fetchAndSetProducts() async {
+    const url =
+        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products.json";
+
+    try {
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final List<Product> loadedProd = [];
+      if (extractedData == null) {
+        return;
+      }
+      extractedData.forEach((prodId, prodData) {
+        loadedProd.add(Product(
+            id: prodId,
+            title: prodData['title'],
+            description: prodData['description'],
+            price: prodData['price'],
+            imageUrl: prodData['imageUrl'],
+            isFavorite: prodData['isFavorite']));
+      });
+      _items = loadedProd;
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> addProduct(Product product) async {
+    const url =
+        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products.json";
+    try {
+      final response = await http.post(url,
+          body: json.encode({
+            'title': product.title,
+            'description': product.description,
+            'price': product.price,
+            'imageUrl': product.imageUrl,
+            'isFavorite': product.isFavorite,
+          }));
+
+      final newProduct = Product(
         title: product.title,
         description: product.description,
         price: product.price,
         imageUrl: product.imageUrl,
-        id: DateTime.now().toString());
-    _items.insert(0, newProduct);
-    notifyListeners();
+        id: json.decode(response.body)['name'],
+      );
+      _items.insert(0, newProduct);
+
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
   }
 
-  void updateProduct(String id, Product newProduct) {
+  Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
+      final url =
+          "https://shopping-app-4f137-default-rtdb.firebaseio.com/products/$id.json";
+      await http.patch(url,
+          body: json.encode({
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'price': newProduct.price,
+            'imageUrl': newProduct.imageUrl,
+          }));
       _items[prodIndex] = newProduct;
     }
 
     notifyListeners();
   }
 
-  void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
+// ************** Optimistic update -
+// when deleting data from servers, they do not throw errors even if the status code is above 400, therfore we generate our own error for status code 405 here.
+  Future<void> deleteProduct(String id) async {
+    final url =
+        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products/$id.json";
+    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
+    var existingProduct = _items[existingProductIndex];
+    _items.removeAt(existingProductIndex);
     notifyListeners();
+
+    final response = await http.delete(url);
+
+    if (response.statusCode >= 400) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+
+      throw HttpException('Deleteting Failed!');
+    }
+    existingProduct = null;
   }
 }
 

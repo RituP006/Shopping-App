@@ -6,6 +6,7 @@ import '../widgets/badge.dart';
 import '../providers/cart.dart';
 import './cart_screen.dart';
 import '../widgets/app_drawer.dart';
+import '../providers/products_provider.dart';
 
 enum FilterOptions {
   Favorites,
@@ -19,6 +20,39 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFav = false;
+  var _isInIt = true;
+  var _isLoading = false;
+
+// initState() runs before the widgets and context has built
+  @override
+  void initState() {
+    // Fetch products from server
+
+    // Provider.of<Products>(context).fetchAndSetProducts(); //Won't work since context is not available yet, but if listen is set to false it'll work.
+
+    // Future.delayed(Duration.zero).then((_) {
+    //   Provider.of<Products>(context).fetchAndSetProducts(); // will work, cause its saaved as todo function and would be executed when synchronous codes have been executed.
+    // });
+    super.initState();
+  }
+
+  // it will run after the widgets are initialized but before the built runs for the first time.
+  @override
+  void didChangeDependencies() {
+    if (_isInIt) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInIt = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +97,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ],
         ),
         drawer: AppDrawer(),
-        body: ProductsGrid(_showOnlyFav));
+        body: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : ProductsGrid(_showOnlyFav));
   }
 }
 
