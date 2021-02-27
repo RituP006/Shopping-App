@@ -65,3 +65,15 @@ used(it's called chaining ).
 http requests methods return Future in dart.
 
 
+***************************************** Authenticatiom in flutter ******************************
+
+> Here we work with Stateless RESTful APIs i.e the server does not care about the individual client that's connected instead 
+it gives a certain end point to which we can send request to which we can return answers.
+
+> here there's no session management, but instead we have tokens.
+
+> when the user logs in, a token is generated at server using certain algorithm and private keys, thats only known to 
+server, so that a token can't be faked. 
+> That token is a very long string  which is sent back to flutter app which you then store in your device (this allows
+us to read it from there when app restarts).
+> Now when we send request to server it requires us to add such a token to the end-point of the request through which now server identifies individual.

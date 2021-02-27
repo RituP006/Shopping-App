@@ -68,6 +68,15 @@ class Products with ChangeNotifier {
 
   // var _showOnlyFavorite = false;
 
+// get token from ChangeNotifierProxyProvider
+  String authToken;
+  String userId;
+  // update(String _token,) => authToken = _token;
+  update(String _token, String id) {
+    authToken = _token;
+    userId = id;
+  }
+
   List<Product> get items {
     // if (_showOnlyFavorite) {
     //   return _items.where((prod) => prod.isFavourite).toList();
@@ -94,9 +103,13 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  Future<void> fetchAndSetProducts() async {
-    const url =
-        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products.json";
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    // error here
+    final filterString =
+        filterByUser ? "orderBy='creatorId'&equalTo='$userId'" : "";
+    // print('creatorId' == userId);
+    var url =
+        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products.json?auth=$authToken?$filterString";
 
     try {
       final response = await http.get(url);
@@ -105,14 +118,25 @@ class Products with ChangeNotifier {
       if (extractedData == null) {
         return;
       }
+
+      //get favourite response for individual users
+      url =
+          'https://shopping-app-4f137-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken';
+      final favoriteResponse = await http.get(url);
+      final favoriteData = json.decode(favoriteResponse.body);
+
       extractedData.forEach((prodId, prodData) {
-        loadedProd.add(Product(
+        loadedProd.add(
+          Product(
             id: prodId,
             title: prodData['title'],
             description: prodData['description'],
             price: prodData['price'],
             imageUrl: prodData['imageUrl'],
-            isFavorite: prodData['isFavorite']));
+            isFavorite:
+                favoriteData == null ? false : favoriteData[prodId] ?? false,
+          ),
+        );
       });
       _items = loadedProd;
       notifyListeners();
@@ -122,17 +146,21 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    const url =
-        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products.json";
+    final url =
+        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products.json?auth=$authToken";
     try {
-      final response = await http.post(url,
-          body: json.encode({
+      final response = await http.post(
+        url,
+        body: json.encode(
+          {
             'title': product.title,
             'description': product.description,
             'price': product.price,
             'imageUrl': product.imageUrl,
-            'isFavorite': product.isFavorite,
-          }));
+            'creatorId': userId,
+          },
+        ),
+      );
 
       final newProduct = Product(
         title: product.title,
@@ -153,7 +181,7 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       final url =
-          "https://shopping-app-4f137-default-rtdb.firebaseio.com/products/$id.json";
+          "https://shopping-app-4f137-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken";
       await http.patch(url,
           body: json.encode({
             'title': newProduct.title,
@@ -171,7 +199,7 @@ class Products with ChangeNotifier {
 // when deleting data from servers, they do not throw errors even if the status code is above 400, therfore we generate our own error for status code 405 here.
   Future<void> deleteProduct(String id) async {
     final url =
-        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products/$id.json";
+        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken";
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
