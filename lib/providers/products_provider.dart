@@ -106,10 +106,10 @@ class Products with ChangeNotifier {
   Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
     // error here
     final filterString =
-        filterByUser ? "orderBy='creatorId'&equalTo='$userId'" : "";
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     // print('creatorId' == userId);
     var url =
-        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products.json?auth=$authToken?$filterString";
+        'https://shopping-app-4f137-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString';
 
     try {
       final response = await http.get(url);
@@ -118,7 +118,7 @@ class Products with ChangeNotifier {
       if (extractedData == null) {
         return;
       }
-
+      print('************** extracted data--> $extractedData');
       //get favourite response for individual users
       url =
           'https://shopping-app-4f137-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken';

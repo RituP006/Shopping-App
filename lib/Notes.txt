@@ -77,3 +77,9 @@ server, so that a token can't be faked.
 > That token is a very long string  which is sent back to flutter app which you then store in your device (this allows
 us to read it from there when app restarts).
 > Now when we send request to server it requires us to add such a token to the end-point of the request through which now server identifies individual.
+
+
+**************************************** Animations in Flutter ****************************************
+
+> Flutter updates the screen 60 times per second, so every 60 miliseconds. 
+> So for Animation we try to change how things look in every 60 milliseconds.
