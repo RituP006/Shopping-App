@@ -1,6 +1,6 @@
 # shop_app
 
-## Made this app to explore how flutter works.
+## Made this app to explore how flutter works behind the scene.
 
 This app covers following core concepts of flutter : 
 
