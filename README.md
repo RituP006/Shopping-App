@@ -1,16 +1,26 @@
 # shop_app
 
-A new Flutter project.
+## Made this app to explore how flutter works.
 
-## Getting Started
+This app covers following core concepts of flutter : 
 
-This project is a starting point for a Flutter application.
+> State management using provider package
 
-A few resources to get you started if this is your first Flutter project:
+> Connecting backend using http package
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+> Token based Authentication
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+> On Device storage using shared preferences
+
+> Scoping data to users
+
+> Adding user interaction
+
+> Animations in flutter
+
+### Short overview of app [here](https://drive.google.com/file/d/1bJ4HLH_ty7bjiuOFLvThZiFVuqcfZBCu/view?usp=sharing)
+
+<img src="./assets/images/app_ss/ss-1.jpg" height=350 width=180> &nbsp; &nbsp; <img src="./assets/images/app_ss/ss-2.jpg" height=350 width=180> &nbsp; &nbsp; <img src="./assets/images/app_ss/ss-3.jpg" height=350 width=180>
+
+
+<img src="./assets/images/app_ss/ss-4.jpg" height=350 width=180> &nbsp; &nbsp; <img src="./assets/images/app_ss/ss-5.jpg" height=350 width=180> &nbsp; &nbsp; <img src="./assets/images/app_ss/ss-6.jpg" height=350 width=180>
