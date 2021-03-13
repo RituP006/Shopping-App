@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../screens/orders_screen.dart';
 import '../screens/user_products_screen.dart';
 import '../providers/auth.dart';
-import '../helpers/custom_route.dart';
+import './switch_theme_button.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -12,13 +12,47 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: <Widget>[
+          // Container(
+          //   margin: EdgeInsets.only(top: 16),
+          //   child: Image(
+          //     height: 200,
+          //     image: AssetImage('./assets/images/drawer/drawer_image4.gif'),
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           AppBar(
-            title: Text('Hello Friend!'),
-            automaticallyImplyLeading: false,
+            leading: Container(),
+            flexibleSpace: Stack(children: [
+              Container(
+                height: 180,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image:
+                        AssetImage('./assets/images/drawer/drawer_image4.gif'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 10,
+                left: 80,
+                child: Text(
+                  'Shop Now!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Quicksand'),
+                ),
+              ),
+            ]),
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.shop),
+            leading: Icon(
+              Icons.shop,
+            ),
             title: Text('Shop'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed('/');
@@ -43,6 +77,13 @@ class AppDrawer extends StatelessWidget {
               Navigator.of(context)
                   .pushReplacementNamed(UserProductsScreen.routeName);
             },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Dark Theme'),
+            onTap: () {},
+            trailing: ChangeThemeButton(),
           ),
           Divider(),
           ListTile(

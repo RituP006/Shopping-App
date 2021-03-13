@@ -13,7 +13,7 @@ import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart';
 import './providers/auth.dart';
 import './screens/splash_screen.dart';
-import './helpers/custom_route.dart';
+import './providers/theme_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,23 +35,22 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Cart(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => ThemeProvider(),
+        ),
         ChangeNotifierProxyProvider<Auth, Orders>(
           create: (ctx) => Orders(),
           update: (ctx, authData, previousOrder) =>
               previousOrder..update(authData.token, authData.userId),
         ),
       ],
-      child: Consumer<Auth>(
-        builder: (ctx, authData, _) => MaterialApp(
+      child: Consumer2<Auth, ThemeProvider>(
+        builder: (ctx, authData, themeData, _) => MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
-          theme: ThemeData(
-              primarySwatch: Colors.purple,
-              accentColor: Colors.deepOrange,
-              fontFamily: 'OpenSans',
-              pageTransitionsTheme: PageTransitionsTheme(builders: {
-                TargetPlatform.android: CustomPageTransitionBuilder(),
-                TargetPlatform.iOS: CustomPageTransitionBuilder(),
-              })),
+          themeMode: themeData.themeMode,
+          theme: MyThemes.lightTheme,
+          darkTheme: MyThemes.darkTheme,
           home: authData.isAuth
               ? ProductsOverviewScreen()
               : FutureBuilder(

@@ -33,34 +33,47 @@ class UserProductsScreen extends StatelessWidget {
                 }),
           ],
         ),
-        body: FutureBuilder(
-          future: _refreshProducts(context),
-          builder: (context, snapshot) =>
-              snapshot.connectionState == ConnectionState.waiting
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : RefreshIndicator(
-                      onRefresh: () => _refreshProducts(context),
-                      child: Consumer<Products>(
-                        builder: (ctx, productsData, _) => Padding(
-                          padding: EdgeInsets.all(8),
-                          child: ListView.builder(
-                            itemBuilder: (ctx, index) => Column(
-                              children: [
-                                UserProductItem(
-                                  productsData.items[index].id,
-                                  productsData.items[index].title,
-                                  productsData.items[index].imageUrl,
+        body: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(8),
+              child: Text(
+                'Add Your Products here!',
+                style: TextStyle(fontSize: 15),
+              ),
+            ),
+            Expanded(
+              child: FutureBuilder(
+                future: _refreshProducts(context),
+                builder: (context, snapshot) =>
+                    snapshot.connectionState == ConnectionState.waiting
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : RefreshIndicator(
+                            onRefresh: () => _refreshProducts(context),
+                            child: Consumer<Products>(
+                              builder: (ctx, productsData, _) => Padding(
+                                padding: EdgeInsets.all(8),
+                                child: ListView.builder(
+                                  itemBuilder: (ctx, index) => Column(
+                                    children: [
+                                      UserProductItem(
+                                        productsData.items[index].id,
+                                        productsData.items[index].title,
+                                        productsData.items[index].imageUrl,
+                                      ),
+                                      Divider(),
+                                    ],
+                                  ),
+                                  itemCount: productsData.items.length,
                                 ),
-                                Divider(),
-                              ],
+                              ),
                             ),
-                            itemCount: productsData.items.length,
                           ),
-                        ),
-                      ),
-                    ),
+              ),
+            ),
+          ],
         ));
   }
 }

@@ -126,7 +126,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Product'),
+        title: Text('Add Product'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
@@ -146,7 +146,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     children: <Widget>[
                       TextFormField(
                         initialValue: _initValues['title'],
-                        decoration: InputDecoration(labelText: 'Title'),
+                        decoration: InputDecoration(
+                          labelText: 'Title',
+                        ),
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (_) {
                           FocusScope.of(context).requestFocus(_priceFocusNode);

@@ -23,7 +23,7 @@ class AuthScreen extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
+                  Color.fromRGBO(204, 255, 255, 1).withOpacity(0.5),
                   Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
                 ],
                 begin: Alignment.topLeft,
@@ -42,38 +42,43 @@ class AuthScreen extends StatelessWidget {
                 children: <Widget>[
                   Flexible(
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 20.0),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
-                      transform: Matrix4.rotationZ(-8 * pi / 180)
-                        ..translate(
-                            -10.0), //see below to understand why double dots?
+                      width: deviceSize.width * 10,
+                      height: deviceSize.height * .20,
+                      margin: EdgeInsets.only(
+                          top: .5, bottom: 10, left: 70, right: 70),
+
+                      // padding:
+                      //     EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
+                      // transform: Matrix4.rotationZ(-8 * pi / 180)
+                      //   ..translate(
+                      //       -10.0), //see below to understand why double dots?
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.deepOrange.shade900,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 8,
-                            color: Colors.black26,
-                            offset: Offset(0, 2),
-                          )
-                        ],
+                        // color: Colors.deepOrange.shade900,
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     blurRadius: 8,
+                        //     color: Colors.black26,
+                        //     offset: Offset(0, 2),
+                        //   )
+                        // ],
                       ),
-                      child: Text(
-                        'MyShop',
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).accentTextTheme.subtitle1.color,
-                          fontSize: 50,
-                          fontFamily: 'Quicksand',
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
+                      child: Image(image: AssetImage('assets/images/logo.png')),
                     ),
                   ),
+                  // Flexible(child: Text('My Shop'),),
                   Flexible(
                     flex: deviceSize.width > 600 ? 2 : 1,
-                    child: AuthCard(),
+                    child: GestureDetector(
+                      onTap: () {
+                        FocusScopeNode currentFocus = FocusScope.of(context);
+
+                        if (!currentFocus.hasPrimaryFocus) {
+                          currentFocus.unfocus();
+                        }
+                      },
+                      child: AuthCard(),
+                    ),
                   ),
                 ],
               ),
@@ -228,6 +233,7 @@ class _AuthCardState extends State<AuthCard>
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Card(
+      color: Theme.of(context).scaffoldBackgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),

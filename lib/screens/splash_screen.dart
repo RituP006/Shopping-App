@@ -7,70 +7,45 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(const Duration(seconds: 3));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
+      backgroundColor: Color.fromRGBO(36, 51, 66, 1),
+      body: Center(
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
           Container(
-            decoration: BoxDecoration(color: Colors.redAccent.shade200),
+            height: 150,
+            width: 150,
+            padding: EdgeInsets.all(30),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white),
+            ),
+            child: Icon(
+              Icons.shop_outlined,
+              color: Colors.white,
+              size: 50,
+            ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 50.0,
-                        child: Icon(
-                          Icons.shopping_cart,
-                          color: Colors.greenAccent,
-                          size: 50.0,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10.0),
-                      ),
-                      Text(
-                        'MyShop',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                    ),
-                    Text(
-                      "Online Store to \n Add Your Own Products",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-              )
-            ],
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            'My Shop',
+            style: TextStyle(
+                color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
           )
         ],
-      ),
+      )),
     );
   }
 }

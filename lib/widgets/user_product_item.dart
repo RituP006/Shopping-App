@@ -15,7 +15,6 @@ class UserProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final scaffold = Scaffold.of(context);
 
-    
     Widget alertBox(ctx) {
       return AlertDialog(
         title: Text('Are You Sure?'),
@@ -49,7 +48,9 @@ class UserProductItem extends StatelessWidget {
     }
 
     return ListTile(
-      title: Text(title),
+      title: Text(
+        title,
+      ),
       leading: CircleAvatar(
         backgroundImage: NetworkImage(imageUrl),
       ),

@@ -88,7 +88,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                 value: cart.itemCount.toString(),
               ),
               child: IconButton(
-                icon: Icon(Icons.shopping_cart),
+                icon: Icon(Icons.shopping_cart_outlined),
                 onPressed: () {
                   Navigator.of(context).pushNamed(CartScreen.routeName);
                 },

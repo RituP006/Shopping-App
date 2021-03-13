@@ -21,72 +21,129 @@ class ProductItem extends StatelessWidget {
     final cart = Provider.of<Cart>(context, listen: false);
     final authData = Provider.of<Auth>(context, listen: false);
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: GridTile(
-        child: GestureDetector(
-          child: Hero(
-            tag: product.id,
-            child: FadeInImage(
-              placeholder: AssetImage('assets/images/product-placeholder.png'),
-              image: NetworkImage(product.imageUrl),
-              fit: BoxFit.cover,
-            ),
-          ),
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              ProductDetailScreen.routeName,
-              arguments: product.id,
-            );
-          },
-        ),
-        footer: GridTileBar(
-          backgroundColor: Colors.black87,
-          leading: Consumer<Product>(
-            builder: (context, product, _) => IconButton(
-              color: Theme.of(context).accentColor,
-              icon: Icon(
-                product.isFavorite ? Icons.favorite : Icons.favorite_border,
-              ),
-              onPressed: () {
-                product
-                    .toggleFav(
-                  authData.token,
-                  authData.userId,
-                )
-                    .catchError((error) {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text(error.toString()),
-                  ));
-                });
-              },
-            ),
-          ),
-          trailing: IconButton(
-            icon: Icon(Icons.shopping_cart),
-            color: Theme.of(context).accentColor,
-            onPressed: () {
-              cart.addItemToCart(product.id, product.title, product.price);
-              Scaffold.of(context).hideCurrentSnackBar();
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Added item to cart!'),
-                  duration: Duration(seconds: 2),
-                  action: SnackBarAction(
-                    label: 'UNDO',
-                    onPressed: () {
-                      cart.removeSingleItem(product.id);
-                    },
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.all(10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Column(
+        children: [
+          GestureDetector(
+            child: Hero(
+              tag: product.id,
+              child: Container(
+                width: 140,
+                height: 120,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: FadeInImage(
+                    placeholder:
+                        AssetImage('assets/images/product-placeholder.png'),
+                    image: NetworkImage(product.imageUrl),
+                    fit: BoxFit.cover,
                   ),
                 ),
+              ),
+            ),
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                ProductDetailScreen.routeName,
+                arguments: product.id,
               );
             },
           ),
-          title: Text(
-            product.title,
-            textAlign: TextAlign.center,
+          SizedBox(
+            height: 8,
           ),
-        ),
+          Expanded(
+            child: SizedBox(
+              width: 145,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.title,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
+                          ),
+                          Text(
+                            '\u{20B9}${product.price}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          )
+                        ],
+                      ),
+                      Consumer<Product>(
+                        builder: (context, product, _) => IconButton(
+                          color: Theme.of(context).accentColor,
+                          iconSize: 23,
+                          alignment: Alignment.topRight,
+                          icon: Icon(
+                            product.isFavorite
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                          ),
+                          onPressed: () {
+                            product
+                                .toggleFav(
+                              authData.token,
+                              authData.userId,
+                            )
+                                .catchError((error) {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text(error.toString()),
+                              ));
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  FlatButton(
+                    color: Colors.amberAccent,
+                    // height: 25,
+                    child: Text(
+                      'Add to cart',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    onPressed: () {
+                      cart.addItemToCart(
+                          product.id, product.title, product.price);
+                      Scaffold.of(context).hideCurrentSnackBar();
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Added item to cart!'),
+                          duration: Duration(seconds: 2),
+                          action: SnackBarAction(
+                            label: 'UNDO',
+                            onPressed: () {
+                              cart.removeSingleItem(product.id);
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

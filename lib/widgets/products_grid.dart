@@ -16,13 +16,14 @@ class ProductsGrid extends StatelessWidget {
     final products = showFav ? productsData.favItems : productsData.items;
 
     return GridView.builder(
+        physics: BouncingScrollPhysics(),
         padding: const EdgeInsets.all(10.0),
         itemCount: products.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 5 / 4,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
+          childAspectRatio: 3 / 4,
+          crossAxisSpacing: 3,
+          mainAxisSpacing: 5,
         ),
         itemBuilder: (ctx, index) {
           return ChangeNotifierProvider.value(
