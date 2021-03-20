@@ -13,14 +13,14 @@ class UserProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scaffold = Scaffold.of(context);
+    final scaffold = ScaffoldMessenger.of(context);
 
     Widget alertBox(ctx) {
       return AlertDialog(
         title: Text('Are You Sure?'),
         content: Text('You want to delete this product'),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             onPressed: () async {
               try {
                 Navigator.of(ctx).pop();
@@ -37,7 +37,7 @@ class UserProductItem extends StatelessWidget {
             },
             child: Text('Yes'),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(ctx).pop();
             },

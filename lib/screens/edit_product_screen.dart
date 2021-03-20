@@ -98,7 +98,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   title: Text('An error occured!'),
                   content: Text('Something went wrong.'),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.of(ctx).pop();
                       },

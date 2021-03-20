@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/screens/product_detail_screen.dart';
 
 import '../providers/cart.dart' show Cart;
 import '../widgets/cart_item.dart';
 import '../providers/orders.dart';
-import './products_overview_screen.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/CartScreen';
@@ -100,7 +98,7 @@ class _OrderButtonState extends State<OrderButton> {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       child: _isLoading ? CircularProgressIndicator() : Text('Order Now'),
       onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
           ? null
@@ -118,7 +116,11 @@ class _OrderButtonState extends State<OrderButton> {
               });
               widget.cart.clearCart();
             },
-      textColor: Theme.of(context).primaryColor,
+      style: ButtonStyle(
+        textStyle: MaterialStateProperty.all<TextStyle>(
+          TextStyle(color: Theme.of(context).primaryColor),
+        ),
+      ),
     );
   }
 }

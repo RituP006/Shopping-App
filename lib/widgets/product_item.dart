@@ -105,7 +105,8 @@ class ProductItem extends StatelessWidget {
                               authData.userId,
                             )
                                 .catchError((error) {
-                              Scaffold.of(context).showSnackBar(SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                 content: Text(error.toString()),
                               ));
                             });
@@ -114,8 +115,10 @@ class ProductItem extends StatelessWidget {
                       ),
                     ],
                   ),
-                  FlatButton(
-                    color: Colors.amberAccent,
+                  TextButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.amberAccent)),
                     // height: 25,
                     child: Text(
                       'Add to cart',
@@ -124,8 +127,8 @@ class ProductItem extends StatelessWidget {
                     onPressed: () {
                       cart.addItemToCart(
                           product.id, product.title, product.price);
-                      Scaffold.of(context).hideCurrentSnackBar();
-                      Scaffold.of(context).showSnackBar(
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Added item to cart!'),
                           duration: Duration(seconds: 2),

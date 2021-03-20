@@ -13,7 +13,7 @@ class ProductDetailScreen extends StatelessWidget {
     final loadedProduct =
         Provider.of<Products>(context, listen: false).findById(productId);
 
-    Widget CustomerReview(String name, String img, int num) {
+    Widget customerReview(String name, String img, int num) {
       return ListTile(
         leading: Container(
           height: 50.0,
@@ -260,43 +260,43 @@ class ProductDetailScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
                   child: Column(
                     children: [
-                      CustomerReview('Sarah joe',
+                      customerReview('Sarah joe',
                           './assets/images/customer/customer-1.jpg', 4),
                       Divider(
                         color: Colors.grey.shade600,
                         height: 2,
                       ),
-                      CustomerReview('Anjali Patel',
+                      customerReview('Anjali Patel',
                           './assets/images/customer/customer-2.jpg', 3),
                       Divider(
                         color: Colors.grey.shade600,
                         height: 2,
                       ),
-                      CustomerReview('Shweta Tiwari',
+                      customerReview('Shweta Tiwari',
                           './assets/images/customer/customer-3.jpg', 2),
                       Divider(
                         color: Colors.grey.shade600,
                         height: 2,
                       ),
-                      CustomerReview('Heena Khan',
+                      customerReview('Heena Khan',
                           './assets/images/customer/customer-4.jpg', 1),
                       Divider(
                         color: Colors.grey.shade600,
                         height: 2,
                       ),
-                      CustomerReview('Pooja Singh',
+                      customerReview('Pooja Singh',
                           './assets/images/customer/customer-2.jpg', 3),
                       Divider(
                         color: Colors.grey.shade600,
                         height: 2,
                       ),
-                      CustomerReview('Pallavi Sharma',
+                      customerReview('Pallavi Sharma',
                           './assets/images/customer/customer-3.jpg', 1),
                       Divider(
                         color: Colors.grey.shade600,
                         height: 2,
                       ),
-                      CustomerReview('Laiba Ansari',
+                      customerReview('Laiba Ansari',
                           './assets/images/customer/customer-4.jpg', 4),
                       Divider(
                         color: Colors.grey.shade600,

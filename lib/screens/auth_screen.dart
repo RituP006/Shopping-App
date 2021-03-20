@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -116,7 +114,6 @@ class _AuthCardState extends State<AuthCard>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller = AnimationController(
       vsync: this,
@@ -145,7 +142,6 @@ class _AuthCardState extends State<AuthCard>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _controller.dispose();
   }
@@ -157,7 +153,7 @@ class _AuthCardState extends State<AuthCard>
         title: Text('An Error Occured!'),
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('OK'),
             onPressed: () {
               Navigator.of(ctx).pop();
@@ -173,7 +169,7 @@ class _AuthCardState extends State<AuthCard>
       // invalidate
       return;
     }
-
+    FocusScope.of(context).unfocus(); // to close the softkeyboard
     _formKey.currentState.save();
     setState(() {
       _isLoading = true;
@@ -260,6 +256,7 @@ class _AuthCardState extends State<AuthCard>
                     if (value.isEmpty || !value.contains('@')) {
                       return 'Invalid email';
                     }
+                    return null;
                   },
                   onSaved: (value) {
                     _authData['email'] = value;
@@ -273,6 +270,7 @@ class _AuthCardState extends State<AuthCard>
                     if (value.isEmpty || value.length < 5) {
                       return 'Password is too short';
                     }
+                    return null;
                   },
                   onSaved: (value) {
                     _authData['password'] = value;
@@ -297,8 +295,9 @@ class _AuthCardState extends State<AuthCard>
                         validator: _authMode == AuthMode.Signup
                             ? (value) {
                                 if (value != _passwordController.text) {
-                                  return 'Password do nor watch';
+                                  return 'Password do not Match';
                                 }
+                                return null;
                               }
                             : null,
                       ),
@@ -311,25 +310,44 @@ class _AuthCardState extends State<AuthCard>
                 if (_isLoading)
                   CircularProgressIndicator()
                 else
-                  RaisedButton(
+                  ElevatedButton(
                     child:
                         Text(_authMode == AuthMode.Login ? 'Login' : 'Sign up'),
                     onPressed: _submit,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding:
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.button.color,
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Theme.of(context).primaryColor),
+                      textStyle: MaterialStateProperty.all<TextStyle>(
+                        TextStyle(
+                          color:
+                              Theme.of(context).primaryTextTheme.button.color,
+                        ),
+                      ),
+                    ),
                   ),
-                FlatButton(
+                TextButton(
                   child: Text(
                       '${_authMode == AuthMode.Login ? 'Signup' : 'Login'} instead'),
                   onPressed: _switchAuthMode,
-                  padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  textColor: Theme.of(context).primaryColor,
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                      EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
+                    ),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    textStyle: MaterialStateProperty.all<TextStyle>(
+                      TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
