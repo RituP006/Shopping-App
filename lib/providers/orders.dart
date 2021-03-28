@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import './cart.dart';
+import '../secret_Keys.dart';
 
 class OrderItem {
   final String id;
@@ -34,8 +35,7 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchAndSetOrders() async {
-    final url =
-        "https://shopping-app-4f137-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken";
+    final url = "$your_app_link/orders/$userId.json?auth=$authToken";
 
     try {
       final response = await http.get(url);
@@ -67,8 +67,7 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> placeOrder(List<CartItem> cartProducts, double total) async {
-    final url =
-        "https://shopping-app-4f137-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken";
+    final url = "$your_app_link/orders/$userId.json?auth=$authToken";
 
     final timestamp = DateTime.now();
     try {

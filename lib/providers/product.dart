@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/http_exception.dart';
+import '../secret_Keys.dart';
 
 class Product with ChangeNotifier {
   final String id;
@@ -28,8 +29,7 @@ class Product with ChangeNotifier {
     isFavorite = !isFavorite;
     notifyListeners();
 
-    final url =
-        "https://shopping-app-4f137-default-rtdb.firebaseio.com/userFavorites/$userId/$id.json?auth=$token";
+    final url = "$your_app_link/userFavorites/$userId/$id.json?auth=$token";
     try {
       final response = await http.put(
         url,

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import 'product.dart';
 import '../models/http_exception.dart';
+import '../secret_Keys.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [
@@ -108,8 +109,7 @@ class Products with ChangeNotifier {
     final filterString =
         filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     // print('creatorId' == userId);
-    var url =
-        'https://shopping-app-4f137-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString';
+    var url = '$your_app_link/products.json?auth=$authToken&$filterString';
 
     try {
       final response = await http.get(url);
@@ -120,8 +120,7 @@ class Products with ChangeNotifier {
       }
       print('************** extracted data--> $extractedData');
       //get favourite response for individual users
-      url =
-          'https://shopping-app-4f137-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken';
+      url = '$your_app_link/userFavorites/$userId.json?auth=$authToken';
       final favoriteResponse = await http.get(url);
       final favoriteData = json.decode(favoriteResponse.body);
 
@@ -146,8 +145,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    final url =
-        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products.json?auth=$authToken";
+    final url = "$your_app_link/products.json?auth=$authToken";
     try {
       final response = await http.post(
         url,
@@ -180,8 +178,7 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      final url =
-          "https://shopping-app-4f137-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken";
+      final url = "$your_app_link/products/$id.json?auth=$authToken";
       await http.patch(url,
           body: json.encode({
             'title': newProduct.title,
@@ -198,8 +195,7 @@ class Products with ChangeNotifier {
 // ************** Optimistic update -
 // when deleting data from servers, they do not throw errors even if the status code is above 400, therfore we generate our own error for status code 405 here.
   Future<void> deleteProduct(String id) async {
-    final url =
-        "https://shopping-app-4f137-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken";
+    final url = "$your_app_link/products/$id.json?auth=$authToken";
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);

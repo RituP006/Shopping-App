@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/http_exception.dart';
+import '../secret_Keys.dart';
 
 class Auth with ChangeNotifier {
   String _token;
@@ -33,7 +34,7 @@ class Auth with ChangeNotifier {
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
     final url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyCf6j54UwWuV2dN4mzUspUbMNPGVOly5Z0';
+        'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?$api_key';
 
     try {
       final response = await http.post(
